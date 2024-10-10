@@ -5,7 +5,9 @@ import inquirer
 
 def search_mod(props):
     query_list = []
-    query = input("Enter name of mod to search: ")
+    query = inquirer.prompt([inquirer.Text("query", message="Enter the name of pack")])[
+        "query"
+    ]
     print()
     res = json.loads(
         requests.get(f"https://api.modrinth.com/v2/search?query={query}").text
@@ -36,5 +38,19 @@ def search_mod(props):
     else:
         print(f"The mod cannot be updated to {props["version"]}.")
 
+
 if __name__ == "__main__":
-    search_mod({"mod_loader": "fabric", "version": "1.21.1"})
+    filter_questions = [
+        inquirer.List(
+            "mod_loader",
+            message="Which mod loader do you want to use?",
+            choices=["Forge", "Fabric", "Quilt"],
+        ),
+        inquirer.List(
+            "version",
+            message="Which version of minecraft do you want to use?",
+            choices=["1.21.1", "1.21", "1.20.6"],
+        ),
+    ]
+    filters = inquirer.prompt(filter_questions)
+    search_mod(filters)
