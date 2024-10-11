@@ -8,7 +8,7 @@ class ExportMods:
         self.mod_list = []
         self.props = props
         self.name = inquirer.prompt(
-            [inquirer.Text("name", message="Enter the name of pack")]
+            [inquirer.Text("name", message="Enter name of the pack")]
         )["name"]
         print()
         choices = [
@@ -20,7 +20,6 @@ class ExportMods:
         ]
         while True:
             selected_mod = inquirer.prompt(choices)
-
             match selected_mod["choice"]:
                 case "List":
                     self.list_mods()
@@ -49,7 +48,7 @@ class ExportMods:
     def append_mod(self):
         query_list = []
         query = inquirer.prompt(
-            [inquirer.Text("name", message="Enter the name of pack")]
+            [inquirer.Text("name", message="Enter name of the mod")]
         )["name"]
         print()
         res = json.loads(

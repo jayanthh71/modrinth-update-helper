@@ -5,7 +5,7 @@ import inquirer
 
 def search_mod(props):
     query_list = []
-    query = inquirer.prompt([inquirer.Text("query", message="Enter the name of pack")])[
+    query = inquirer.prompt([inquirer.Text("query", message="Enter name of the mod")])[
         "query"
     ]
     print()
@@ -34,9 +34,9 @@ def search_mod(props):
             mod = query[0]
 
     if props["version"] in mod["versions"]:
-        print(f"The mod can be updated to {props["version"]}!")
+        print(f"The mod can be updated to {props["version"]}!\n")
     else:
-        print(f"The mod cannot be updated to {props["version"]}.")
+        print(f"The mod cannot be updated to {props["version"]}.\n")
 
 
 if __name__ == "__main__":

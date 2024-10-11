@@ -11,17 +11,18 @@ def main(props):
             choices=["Search", "Import", "Export", "Exit"],
         )
     ]
-    choice = inquirer.prompt(choices)
 
-    match choice["choice"]:
-        case "Search":
-            search_mod(props)
-        case "Import":
-            pass
-        case "Export":
-            ExportMods(props)
-        case "Exit":
-            exit()
+    while True:
+        choice = inquirer.prompt(choices)
+        match choice["choice"]:
+            case "Search":
+                search_mod(props)
+            case "Import":
+                pass
+            case "Export":
+                ExportMods(props)
+            case "Exit":
+                exit()
 
 
 if __name__ == "__main__":
