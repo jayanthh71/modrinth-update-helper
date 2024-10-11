@@ -1,6 +1,7 @@
 import inquirer
 from search import search_mod
 from export import ExportMods
+from imprt import ImportMods
 
 
 def main(props):
@@ -18,7 +19,7 @@ def main(props):
             case "Search":
                 search_mod(props)
             case "Import":
-                pass
+                ImportMods(props)
             case "Export":
                 ExportMods(props)
             case "Edit Filters":

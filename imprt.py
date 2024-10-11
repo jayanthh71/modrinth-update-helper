@@ -1,26 +1,68 @@
+import os
 import inquirer
-import json
 import requests
+import json
 
 
-class ExportMods:
+class ImportMods:
     def __init__(self, props):
-        self.mod_list = []
         self.props = props
-        self.name = inquirer.prompt(
-            [inquirer.Text("name", message="Enter a name for this pack")]
-        )["name"]
-        print()
+        text_files = []
+        for file in os.listdir():
+            if file[-4:] == ".txt":
+                text_files.append(file)
+        if not text_files:
+            print("There are no packs in this directory\n")
+            return
+
+        file_select = [
+            inquirer.List(
+                "file",
+                message="What pack do you want to import?",
+                choices=text_files,
+            ),
+        ]
+        self.selected_file = inquirer.prompt(file_select)["file"]
+        self.mod_list = []
+
+        with open(self.selected_file, "r") as file:
+            try:
+                file_contents = file.readlines()
+                if not file_contents:
+                    print("The packs is empty\n")
+                    return
+                for mod_id in file_contents:
+                    mod = json.loads(
+                        requests.get(
+                            f"https://api.modrinth.com/v2/project/{mod_id.strip()}"
+                        ).text
+                    )
+                    self.mod_list.append(mod)
+            except:
+                print(
+                    "There was an error in retrieving mods. Please check the pack file\n"
+                )
+                return
+        print("Pack successfully imported.\n")
+
         choices = [
             inquirer.List(
                 "choice",
                 message="What do you want to do?",
-                choices=["List", "Append", "Delete", "Clear", "Save", "Go Back"],
+                choices=[
+                    "List",
+                    "Append",
+                    "Delete",
+                    "Clear",
+                    "Save",
+                    "Delete Pack",
+                    "Go Back",
+                ],
             ),
         ]
         while True:
-            selected_choice = inquirer.prompt(choices)
-            match selected_choice["choice"]:
+            selected_mod = inquirer.prompt(choices)
+            match selected_mod["choice"]:
                 case "List":
                     self.list_mods()
                 case "Append":
@@ -33,6 +75,10 @@ class ExportMods:
                     self.save_mods()
                     if self.mod_list:
                         break
+                case "Delete Pack":
+                    os.remove(self.selected_file)
+                    print("Pack successfully deleted\n")
+                    break
                 case "Go Back":
                     break
 
@@ -124,9 +170,12 @@ class ExportMods:
             print("There are no mods in the pack\n")
             return
 
-        with open(f"{self.name}.txt", "w") as file:
+        with open(self.selected_file, "w+") as file:
             for mod in self.mod_list:
-                file.write(f"{mod["project_id"]}\n")
+                try:
+                    file.write(f"{mod["id"]}\n")
+                except:
+                    file.write(f"{mod["project_id"]}\n")
         print("Pack successfully saved\n")
 
 
@@ -144,4 +193,4 @@ if __name__ == "__main__":
         ),
     ]
     filters = inquirer.prompt(filter_questions)
-    ExportMods(filters)
+    ImportMods(filters)
