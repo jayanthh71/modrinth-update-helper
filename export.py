@@ -8,7 +8,7 @@ class ExportMods:
         self.mod_list = []
         self.props = props
         self.name = inquirer.prompt(
-            [inquirer.Text("name", message="Enter name of the pack")]
+            [inquirer.Text("name", message="Enter a name for this pack")]
         )["name"]
         print()
         choices = [
@@ -31,7 +31,8 @@ class ExportMods:
                     self.clear_mods()
                 case "Save":
                     self.save_mods()
-                    break
+                    if self.mod_list:
+                        break
                 case "Go Back":
                     break
 
@@ -41,7 +42,14 @@ class ExportMods:
             return
 
         for i in range(len(self.mod_list)):
-            print(f"{i + 1}. {self.mod_list[i]["title"]}")
+            if self.props["version"] in self.mod_list[i]["versions"]:
+                print(
+                    f"{i + 1}. {self.mod_list[i]["title"]} --> can be updated to {self.props["version"]}"
+                )
+            else:
+                print(
+                    f"{i + 1}. {self.mod_list[i]["title"]} --> cannot be updated to {self.props["version"]}"
+                )
         print(f"\n{len(self.mod_list)} mods in pack\n")
         return
 
