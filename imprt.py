@@ -8,7 +8,7 @@ class ImportMods:
     def __init__(self, props):
         self.props = props
         text_files = []
-        for file in os.listdir("./packs"):
+        for file in os.listdir("packs"):
             if file[-4:] == ".txt":
                 text_files.append(file)
         if not text_files:
@@ -22,7 +22,9 @@ class ImportMods:
                 choices=text_files,
             ),
         ]
-        self.selected_file = f"./packs/{inquirer.prompt(file_select)["file"]}"
+        self.selected_file = os.path.join(
+            "packs", f"{inquirer.prompt(file_select)["file"]}"
+        )
         self.mod_list = []
 
         with open(self.selected_file, "r") as file:

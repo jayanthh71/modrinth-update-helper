@@ -125,11 +125,11 @@ class ExportMods:
             print("There are no mods in the pack\n")
             return
 
-        newpath = "./packs"
-        if not os.path.exists(newpath):
-            os.makedirs(newpath)
+        if not os.path.exists("packs"):
+            os.makedirs("packs")
 
-        with open(f"packs/{self.name}.txt", "w") as file:
+        save_path = os.path.join("packs", f"{self.name}.txt")
+        with open(save_path, "w") as file:
             for mod in self.mod_list:
                 file.write(f"{mod["project_id"]}\n")
         print("Pack successfully saved\n")
