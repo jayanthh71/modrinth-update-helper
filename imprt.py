@@ -90,7 +90,7 @@ class ImportMods:
             return
 
         for i in range(len(self.mod_list)):
-            if self.props["version"] in self.mod_list[i]["versions"]:
+            if self.props["version"] in self.mod_list[i]["game_versions"]:
                 print(
                     f"{i + 1}. {self.mod_list[i]["title"]} --> can be updated to {self.props["version"]}"
                 )
