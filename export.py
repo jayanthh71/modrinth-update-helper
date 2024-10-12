@@ -1,5 +1,6 @@
 import inquirer
 import json
+import os
 import requests
 
 
@@ -124,7 +125,11 @@ class ExportMods:
             print("There are no mods in the pack\n")
             return
 
-        with open(f"{self.name}.txt", "w") as file:
+        newpath = "./packs"
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+
+        with open(f"packs/{self.name}.txt", "w") as file:
             for mod in self.mod_list:
                 file.write(f"{mod["project_id"]}\n")
         print("Pack successfully saved\n")
